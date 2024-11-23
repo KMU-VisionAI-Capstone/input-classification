@@ -1,0 +1,6 @@
+gradio
+torch
+torchvision
+efficientnet-pytorch
+Pillow
+numpy
