@@ -95,7 +95,7 @@ def inference(input_data):
 
 if __name__ == "__main__":
     # 이미지 파일 경로 테스트
-    inference(image_path="./test_data/tower.jpg")
+    inference(input_data="./test_data/tower.jpg")
     
     # NumPy 배열 테스트
     dummy_image = np.random.randint(0, 256, (224, 224, 3), dtype=np.uint8)
