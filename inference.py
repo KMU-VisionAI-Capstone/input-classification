@@ -19,7 +19,7 @@ def load_model(checkpoint_path, model_arch):
     else:
         model = models.__dict__[model_arch]()
     checkpoint = torch.load(checkpoint_path)
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(checkpoint["state_dict"])
     model = model.to(DEVICE)
     model.eval()  # 평가 모드로 전환
     return model
@@ -37,18 +37,20 @@ def load_class_mapping(class_mapping_file):
 
 def preprocess_image(input_data, image_size):
     """이미지를 불러와 전처리합니다."""
-    image_transforms = transforms.Compose([
-        transforms.Resize(image_size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-    
+    image_transforms = transforms.Compose(
+        [
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
     # NumPy 배열을 PIL 이미지로 변환
     if isinstance(input_data, np.ndarray):
         if input_data.ndim == 2:  # 흑백 이미지 처리
             input_data = np.stack([input_data] * 3, axis=-1)
-        input_data = Image.fromarray(input_data.astype('uint8'))
-    
+        input_data = Image.fromarray(input_data.astype("uint8"))
+
     # 파일 경로일 경우 처리
     elif isinstance(input_data, str):  # 이미지 파일 경로
         input_data = Image.open(input_data).convert("RGB")
@@ -73,16 +75,16 @@ def predict(input_data, model, idx_to_class, top_k=5):
     return results
 
 
-def inference(input_data):
+def classify(input_data):
     """메인 실행 함수."""
     print(f"Input Data Type: {type(input_data)}")
 
     # 모델 로드
     model = load_model(CHECKPOINT_PATH, MODEL_ARCH)
-    
+
     # 클래스 이름 매핑 로드
     idx_to_class = load_class_mapping(CLASS_MAPPING_FILE)
-    
+
     # 예측 수행
     predictions = predict(input_data, model, idx_to_class)
 
@@ -95,8 +97,8 @@ def inference(input_data):
 
 if __name__ == "__main__":
     # 이미지 파일 경로 테스트
-    inference(input_data="./test_data/tower.jpg")
-    
+    classify(input_data="./test_data/tower.jpg")
+
     # NumPy 배열 테스트
-    dummy_image = np.random.randint(0, 256, (224, 224, 3), dtype=np.uint8)
-    inference(dummy_image)
+    # dummy_image = np.random.randint(0, 256, (224, 224, 3), dtype=np.uint8)
+    # inference(dummy_image)
