@@ -1,6 +1,6 @@
 import gradio as gr
 from inference import classify
-from Image_Captioning.one_image_captioning import captioning
+from image_captioning.one_image_captioning import captioning
 
 
 def get_classification_ui(predictions):
